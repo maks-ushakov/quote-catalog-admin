@@ -1,0 +1,25 @@
+{
+  "name": "bears-team-25",
+  "version": "1.0.0",
+  "description": "quote catalog",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chingu-voyage7/Bears-Team-25.git"
+  },
+  "keywords": [
+    "chingu",
+    "teamvoyage",
+    "quote",
+    "vuejs"
+  ],
+  "author": "Bears Team 25",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chingu-voyage7/Bears-Team-25/issues"
+  },
+  "homepage": "https://github.com/chingu-voyage7/Bears-Team-25#readme"
+}
