@@ -1,6 +1,5 @@
 <template>
-<div></div>
+	<section></section>
 </template>
-
 <style scoped>
 </style>
