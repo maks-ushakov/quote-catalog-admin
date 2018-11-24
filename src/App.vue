@@ -36,13 +36,18 @@
 							role="button"
 							aria-haspopup="true"
 							aria-expanded="false"
-						>Dropdown</a>
+						>Profile</a>
 						<div class="dropdown-menu dropdown-menu-right">
-							<a class="dropdown-item" href="#">Action</a>
-							<a class="dropdown-item" href="#">Another action</a>
-							<a class="dropdown-item" href="#">Something else here</a>
+							<router-link :to="{name:'dashboard', params:{id:id}}" class="dropdown-item">
+								<i class="fas fa-user-circle">&nbsp;&nbsp;</i>Dashboard
+							</router-link>
+							<router-link :to="{name:'settings', params:{id:id}}" class="dropdown-item">
+								<i class="fas fa-cog">&nbsp;&nbsp;</i>Settings
+							</router-link>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="#" @click.prevent="logout()">
+								<i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>Logout
+							</a>
 						</div>
 					</li>
 				</ul>
@@ -58,8 +63,16 @@ export default {
   name: "Main",
   data() {
     return {
-      logged: false
+      logged: true,
+      id: 1233
     };
+  },
+  methods: {
+    logout() {
+      setTimeout(() => {
+        this.$router.push({ name: "home" });
+      }, 3000);
+    }
   }
 };
 </script>
