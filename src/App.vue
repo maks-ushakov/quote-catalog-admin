@@ -1,5 +1,43 @@
 <template>
-	<section></section>
+	<section>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<router-link to="/" class="navbar-brand">Quote</router-link>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-toggle="collapse"
+				data-target="#navbarCollapse"
+				aria-controls="navbarCollapse"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="fas fa-bars"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">
+							Home
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Link</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link disabled" href="#">Disabled</a>
+					</li>
+				</ul>
+				<form class="form-inline mt-2 mt-md-0">
+					<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				</form>
+			</div>
+		</nav>
+		<div class="container-fluid" style="margin-top:30px"></div>
+	</section>
 </template>
+<script>
+</script>
 <style scoped>
 </style>
