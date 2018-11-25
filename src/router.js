@@ -18,6 +18,7 @@ const router = new Router({
 		}, {
 			path: '/home',
 			name: 'home',
+			caseSensitive: true,
 			meta: {
 				title: 'Home'
 			},
@@ -25,6 +26,7 @@ const router = new Router({
 		}, {
 			path: '/login',
 			component: LoginComponent,
+			caseSensitive: true,
 			name: 'login',
 			meta: {
 				title: 'Login'
@@ -39,6 +41,7 @@ const router = new Router({
 		}, {
 			path: '/reset-password/:email',
 			component: ResetPasswordComponent,
+			caseSensitive: true,
 			name: 'reset-password',
 			meta: {
 				title: 'Reset Password'
@@ -47,6 +50,7 @@ const router = new Router({
 		{
 			path: '/user/:id/dashboard',
 			component: DashboardComponent,
+			caseSensitive: true,
 			meta: {
 				title: 'Dashboard'
 			},
@@ -57,6 +61,7 @@ const router = new Router({
 			meta: {
 				title: 'Settings'
 			},
+			caseSensitive: true,
 			component: SettingComponent,
 			name: 'settings'
 		},
