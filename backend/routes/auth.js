@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const User = require("../models/author");
+const Author = require("../models/author");
 const hasher = require("crypto");
 
 // router to login the user
@@ -18,7 +18,7 @@ router.post("/login", (req, res) => {
         } else { // valid payload
             // hasing password
             req.body.password = hasher.createHash("sha512").update(req.body.password).digest("hex");
-            User.findOne(req.body).exec((err, user) => { // finding unique document
+            Author.findOne(req.body).exec((err, user) => { // finding unique document
                 if (err) { // send 503 if got some db related error
                     res.status(503).json({
                         success: false,
