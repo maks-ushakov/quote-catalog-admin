@@ -1,6 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
+
+// connecting to mongoose
+if (!process.env.MONGO_USER || !process.env.MONGO_PASS || !process.env.MONGO_HOST || !process.env.MONGO_DB) {
+    console.error("Invalid DB Config");
+    process.exit(1);
+}
+mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}`, {
+    useNewUrlParser: true
+}).then(() => {
+    console.log(`${process.env.MONGO_USER}@${process.env.MONGO_HOST} Connected To DB`);
+}).catch(() => {
+    console.log("Error : Can't Connect To DB");
+    process.exit(1);
+});
 
 // creating express app
 const app = express();
