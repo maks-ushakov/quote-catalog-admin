@@ -42,7 +42,7 @@ app.use(session({
     saveUninitialized: true,
     resave: false,
     secret: "va3QFZFbxvvjd",
-    name: "Quote Catalog",
+    name: "Quote-Catalog",
 }))
 // managing routes
 app.use("/api/auth", require("./routes/auth"));
