@@ -12,14 +12,14 @@ if (process.env.NODE_ENV == "development") {
     app.use(require("morgan")("combined"));
 }
 app.use(bodyParser.json());
-app.use(express.static(path.resolve(path.join(__dirname, '../dist'))));
+app.use(express.static(path.resolve(path.join(__dirname, '../public'))));
 
 // managing routes
 app.use("/api/user", require("./routes/users"));
 
 // handling 404
 app.get("*", (req, res) => {
-    res.sendFile(path.resolve(path.join(__dirname, '../dist/index.html')));
+    res.sendFile(path.resolve(path.join(__dirname, '../public/index.html')));
 });
 
 // configuring port
