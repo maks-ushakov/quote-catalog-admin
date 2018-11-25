@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const User = require("../models/user");
+const User = require("../models/author");
 const hasher = require("crypto");
 
 // router to login the user
