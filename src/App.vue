@@ -63,8 +63,8 @@ export default {
   name: "Main",
   data() {
     return {
-      logged: true,
-      id: 1233
+      logged: false,
+      id: ""
     };
   },
   methods: {
