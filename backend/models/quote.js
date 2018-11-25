@@ -22,6 +22,10 @@ const QuoteSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: "User"
+    },
+    postedBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     }
 });
 
