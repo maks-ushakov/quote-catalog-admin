@@ -4,7 +4,7 @@ const hasher = require("crypto");
 
 // router to login the user
 router.post("/login", (req, res) => {
-    if (!req.session.user) { // send 404 if logged in
+    if (req.session.user) { // send 404 if logged in
         res.status(404).json({
             success: false,
             verbose: "Not Found"
@@ -43,7 +43,7 @@ router.post("/login", (req, res) => {
 
 // router to logout the user
 router.get("/logout", (req, res) => {
-    if (!req.session.user) { // send 404 if not logged in
+    if (req.session.user) { // send 404 if not logged in
         res.status(404).json({
             success: false,
             verbose: "Not Found"
