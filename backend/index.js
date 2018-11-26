@@ -13,7 +13,8 @@ if (!process.env.MONGO_USER || !process.env.MONGO_PASS || !process.env.MONGO_HOS
     process.exit(1);
 }
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}`, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true
 }).then(() => {
     console.log(`${process.env.MONGO_USER}@${process.env.MONGO_HOST} Connected To DB`);
 }).catch(() => {
