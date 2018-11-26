@@ -1,10 +1,14 @@
+/**
+ * @file quotes.js
+ * @description API ENDPOINT TO DEAL WITH QUOTES
+ */
 const router = require("express").Router();
 // eslint-disable-next-line
 const Author = require("../models/author");
 const Quote = require("../models/quote");
 
 // router to get all 
-router.get("/randon", (req, res) => {
+router.get("/random", (req, res) => {
     Quote.count().exec((err, count) => { // counting documents
         if (err) { // send 503 if error related to db
             res.status(503).json({

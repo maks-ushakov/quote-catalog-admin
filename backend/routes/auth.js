@@ -1,3 +1,7 @@
+/**
+ * @file auth.js
+ * @description API ENDPOINT TO DEAL WITH AUTHOR AUTHENTICATION
+ */
 const router = require("express").Router();
 const Author = require("../models/author");
 const hasher = require("crypto");
