@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section class="main">
 		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
 			<router-link :to="{name:'home'}" class="navbar-brand">Quote</router-link>
 			<button
@@ -77,4 +77,21 @@ export default {
 };
 </script>
 <style scoped>
+	section.main {
+		height: 100vh;
+    display: flex;
+		flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);
+	}
+	section.main nav {
+		flex: 1 0 100%;
+	}
+	@media screen and (max-width:767px) {
+		section.main {
+			height: auto;
+			min-height: 100vh;
+		}
+	}
 </style>

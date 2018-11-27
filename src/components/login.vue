@@ -1,9 +1,9 @@
 <template>
     <section class="mt-2">
-        <div class="row">
-            <div class="col-5">
-                <h3 class="text-center">Enter Login Details</h3>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-7 col-lg-5">
                 <form action="" @submit.prevent="sendSubmit()">
+                    <h3 class="text-center">Enter Login Details</h3>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input
@@ -46,9 +46,8 @@
                         </button>
                     </div>
                 </form>
-            </div>
-            <div class="col-7 text-center mt-auto mb-auto">New to the community ?
-                <router-link :to="{name:'signup'}">Create Account</router-link>
+                <span class="help-text">New to the community ?
+                <router-link :to="{name:'signup'}">Create Account</router-link></span>
             </div>
         </div>
     </section>
@@ -94,5 +93,56 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+    h3 {
+        color: #333;
+    }
+    form {
+        background: #fff;
+        box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.06);
+        border-radius: 5px;
+        padding: 20px 30px;
+        transition: 0.3s;
+        a {
+            color: #333;
+            &:hover,
+            &:focus,
+            &:active {
+                text-decoration: none;
+            }
+        }
+        .btn {
+            background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+            transition: 0.3s;
+            border:none;
+            &:hover,
+            &:focus,
+            &:active {
+                background-image: linear-gradient(to bottom, #819bcb, #536f9d);
+                box-shadow: none;
+                transition: 0.3s;
+            }
+        }
+    }
+    span.help-text {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #333;
+        a {
+            color: #333;
+            font-weight: 500;
+            &:hover,
+            &:focus,
+            &:active {
+                text-decoration: none;
+            }
+        }
+    }
+    @media screen and (max-width:767px) {
+        h3 {
+            font-size: 1.3rem;
+        }
+    }
 </style>
