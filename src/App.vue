@@ -78,7 +78,8 @@ export default {
 </script>
 <style scoped>
 	section.main {
-		height: 100vh;
+		height: auto;
+		min-height: 100vh;
     display: flex;
 		flex-wrap: wrap;
     align-items: baseline;
@@ -87,11 +88,5 @@ export default {
 	}
 	section.main nav {
 		flex: 1 0 100%;
-	}
-	@media screen and (max-width:767px) {
-		section.main {
-			height: auto;
-			min-height: 100vh;
-		}
 	}
 </style>
