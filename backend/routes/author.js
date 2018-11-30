@@ -128,7 +128,7 @@ router.get("/check-id/:id", (req, res) => {
 });
 
 // router to get updatable info
-router.get("/upadte", (req, res) => {
+router.get("/update", (req, res) => {
     if (!req.session.user) { // send 404 if not logged in
         res.status(404).json({
             status: false,
