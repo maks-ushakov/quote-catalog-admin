@@ -9,6 +9,8 @@ import NotFoundComponent from './components/404.vue'
 import ResetPasswordComponent from './components/reset-password.vue'
 import DashboardComponent from './components/user/dashboard.vue'
 import SettingComponent from './components/user/settings.vue'
+import RestorePassword from './components/restore-password.vue'
+
 Vue.use(Router)
 const router = new Router({
 	mode: 'hash',
@@ -64,6 +66,12 @@ const router = new Router({
 			caseSensitive: true,
 			component: SettingComponent,
 			name: 'settings'
+		},
+		{
+			path: '/restore-password/:token',
+			meta: {title:'Set New Password'},
+			name: 'restore-password',
+			component: RestorePassword
 		},
 		{
 			path: '*',
