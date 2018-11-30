@@ -89,5 +89,51 @@ router.get("/", (req, res) => {
     }
 });
 
-// router to update 
+// router to create new route 
+router.post("/", (req, res) => {
+    if (!req.session.user) { // send 405 if not logged in
+        res.status(405).json({
+            status: false,
+            verbose: "Login to add quotes"
+        });
+    } else { // validate and add quote
+        // add quote
+        // update quotes in Author model
+    }
+});
+
+// router to delete quote
+router.delete("/:id", (req, res) => {
+    if (!req.session.user) { // send 405 if not logged in
+        res.status(405).json({
+            status: false,
+            verbose: "Login to delete quotes"
+        });
+    } else if (!req.params.id) { // send 404 if no id passed
+        res.status(404).json({
+            status: false,
+            verbose: "Not found"
+        });
+    } else { // delete quote
+        // delete quote use findByID instead because we have to use _id (uuid field)
+        // delete from Authors collection too
+    }
+});
+
+// router to update quote
+router.put("/:id", (req, res) => {
+    if (!req.session.user) { // send 405 if not logged in
+        res.status(405).json({
+            status: false,
+            verbose: "Login to update quotes"
+        });
+    } else if (!req.params.id) { // send 404 if no id passed
+        res.status(404).json({
+            status: false,
+            verbose: "Not found"
+        });
+    } else { // update quote
+        // update quote use findByID instead because we have to use _id (uuid field)
+    }
+});
 module.exports = router;
