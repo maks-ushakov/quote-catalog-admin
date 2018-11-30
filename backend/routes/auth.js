@@ -138,10 +138,10 @@ router.get("/restore-password", (req, res) => {
                     success: false,
                     verbose: "Not Found"
                 });
-            } else {
+            } else { // send success
                 res.json({
                     status: true,
-                    verbose: "Reset Password Request Found";
+                    verbose: "Reset Password Request Found"
                 });
             }
         });
@@ -152,6 +152,39 @@ router.get("/restore-password", (req, res) => {
 router.post("/restore-password/:token", (req, res) => {
     if (req.session.user) { // send 404 if logged in
         res.status(404).json();
+    } else { // find restore and send resposne
+        ResetPassword.findOne({
+            token: req.params.token
+        }).exec((err, doc) => { // send 503 if error in db
+            if (err) {
+                res.status(503).json({
+                    status: false,
+                    verbose: "Something went wrong"
+                });
+            } else if (!doc) { // no request for reset password found for token
+                res.status(404).json({
+                    success: false,
+                    verbose: "Not Found"
+                });
+            } else { // update
+                req.body.password = hasher.createHash("sha512").update(req.body.password).digest("hex");
+                Author.findOneAndUpdate({
+                    email: doc.email
+                }, req.body).exec((err) => {
+                    if (err) { // send 503 if error related to db
+                        res.status(503).json({
+                            success: false,
+                            verbose: "Something went wrong"
+                        });
+                    } else { // send success otherwise
+                        res.json({
+                            success: true,
+                            verbose: "Password changed successfully"
+                        });
+                    }
+                });
+            }
+        });
     }
 });
 module.exports = router;
