@@ -153,7 +153,7 @@ router.post("/restore-password/:token", (req, res) => {
     if (req.session.user) { // send 404 if logged in
         res.status(404).json();
     } else { // find restore and send resposne
-        ResetPassword.findOne({
+        ResetPassword.findOneAndDelete({
             token: req.params.token
         }).exec((err, doc) => { // send 503 if error in db
             if (err) {
