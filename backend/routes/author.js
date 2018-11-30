@@ -135,7 +135,7 @@ router.get("/update", (req, res) => {
             verbose: "Not found"
         });
     } else { // send non 404
-        Author.findById(req.session.user).populate("quotes").exec((err, doc) => {
+        Author.findById(req.session.user, "id name email").exec((err, doc) => {
             if (err) { // send 503 if error while
                 res.status(503).json({
                     status: false,
