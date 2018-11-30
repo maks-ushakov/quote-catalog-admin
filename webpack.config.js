@@ -1,22 +1,20 @@
 var path = require('path')
 var webpack = require('webpack')
-const { VueLoaderPlugin } = require('vue-loader')
+const {
+  VueLoaderPlugin
+} = require('vue-loader')
 
 module.exports = {
   mode: process.env.NODE_ENV,
-  entry: {
-    index: './src/main.js',
-    admin: './src/admin.js',
-  },
-  
+  entry: './src/main.js',
+
   output: {
     path: path.resolve(__dirname, './public/js'),
     publicPath: '/public/',
     filename: 'build-[name].js'
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.css$/,
         use: [
           'vue-style-loader',
@@ -93,11 +91,11 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  // devtool: '#eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
+  // module.exports.devtool = '#source-map'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
