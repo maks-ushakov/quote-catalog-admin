@@ -2,6 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 mongoose.Promise = global.Promise;
 
 // connecting to mongoose
@@ -10,7 +13,8 @@ if (!process.env.MONGO_USER || !process.env.MONGO_PASS || !process.env.MONGO_HOS
     process.exit(1);
 }
 mongoose.connect(`mongodb://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_HOST}/${process.env.MONGO_DB}`, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useCreateIndex: true
 }).then(() => {
     console.log(`${process.env.MONGO_USER}@${process.env.MONGO_HOST} Connected To DB`);
 }).catch(() => {
@@ -29,9 +33,22 @@ if (process.env.NODE_ENV == "development") {
 }
 app.use(bodyParser.json());
 app.use(express.static(path.resolve(path.join(__dirname, '../public'))));
-
+app.use(cors());
+app.use(cookieParser());
+app.use(session({
+    cookie: {
+        secure: false,
+        maxAge: 864000000
+    },
+    saveUninitialized: true,
+    resave: false,
+    secret: "va3QFZFbxvvjd",
+    name: "Quote-Catalog",
+}))
 // managing routes
-app.use("/api/user", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/quotes", require("./routes/quotes"));
+app.use("/api/author", require("./routes/author"));
 
 // handling 404
 app.get("*", (req, res) => {
