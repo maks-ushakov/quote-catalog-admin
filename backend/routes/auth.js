@@ -5,7 +5,7 @@
 const router = require("express").Router();
 const Author = require("../models/author");
 const hasher = require("crypto");
-
+const RestorePassword = require("../models/restore-password");
 // router to login the user
 router.post("/login", (req, res) => {
     if (req.session.user) { // send 404 if logged in
@@ -68,4 +68,35 @@ router.get("/logout", (req, res) => {
         });
     }
 });
+
+// adding router to send reset password
+router.post("/reset-password", (req, res) => {
+    if (req.session.user) { // send 404 if not logged in
+        res.status(404).json({
+            status: false,
+            verbose: "Not Founf"
+        });
+    } else { // find and send reset link to mail
+        Author.findOne(req.body).exec((err, author) => {
+            if (err) { // send 503 if error while dealing with mongodb
+                res.status(503).json({
+                    success: false,
+                    verbose: "Something went wrong"
+                });
+            } else if (!author) { // send 404 if no author found
+                res.status(503).json({
+                    success: false,
+                    verbose: `Email '${req.body.email}' not found`
+                });
+            } else { // send success
+                res.json({
+                    success: true,
+                    verbose: `Email sent to ${req.body.email}`
+                });
+            }
+        });
+    }
+});
+
+// adding router restore password
 module.exports = router;
