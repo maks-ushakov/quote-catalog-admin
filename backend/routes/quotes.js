@@ -109,7 +109,9 @@ router.post("/", (req, res) => {
             if (!req.body.author) {
                 req.body.author = "Unknown"
             }
-            const quote = new Quote(req.body);    
+            
+            req.body.postedBy = req.session.user;
+            const quote = new Quote(req.body);
             // update quotes in Author model
             quote.save((err) => { //saving newly created document
                 if (err) { // send 503 if error in db operation
