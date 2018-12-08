@@ -91,14 +91,41 @@ router.get("/", (req, res) => {
 
 // router to create new route 
 router.post("/", (req, res) => {
-    if (!req.session.user) { // send 405 if not logged in
+    if (process.env.ACCESS_WITHOUT_AUTH != "1" && !req.session.user) { 
+        // send 405 if not logged in
         res.status(405).json({
             status: false,
             verbose: "Login to add quotes"
         });
-    } else { // validate and add quote
-        // add quote
-        // update quotes in Author model
+    } else { 
+        // validate and add quote
+        if (!req.body.text) {
+            res.status(406).json({
+                success: false,
+                verbose: "Invalid input. Text is required"
+            });
+        } else {
+            // add quote
+            if (!req.body.author) {
+                req.body.author = "Unknown"
+            }
+            const quote = new Quote(req.body);    
+            // update quotes in Author model
+            quote.save((err) => { //saving newly created document
+                if (err) { // send 503 if error in db operation
+                    res.status(503).json({
+                        success: false,
+                        verbose: "Something went wrong"
+                    });
+                } else { // send success otherwise
+                    res.json({
+                        success: true,
+                        verbose: "Successfully added"
+                    });
+                }
+            })
+        }
+
     }
 });
 
