@@ -9,16 +9,17 @@ const Quote = require("../models/quote");
 
 // router to get all 
 router.get("/random", (req, res) => {
-    Quote.count().exec((err, count) => { // counting documents
+    Quote.estimatedDocumentCount().exec((err, count) => { // counting documents
         if (err) { // send 503 if error related to db
             res.status(503).json({
                 success: false,
-                verbose: "Something went wrong"
+                verbose: "Something went wrong",
+                message: err.message
             });
         } else { // get random document otherwise
             const random = Math.floor(Math.random() * count); // getting random number
 
-            Quote.findOne().populate("author").populate("postedBy").skip(random).exec((err, quote) => { // query all quotes but only fetch one offset by our random
+            Quote.findOne().populate("postedBy").skip(random).exec((err, quote) => { // query all quotes but only fetch one offset by our random
                 if (err) { // send 503 if error related to db
                     res.status(503).json({
                         success: false,
@@ -40,7 +41,7 @@ router.get("/:id", (req, res) => {
             verbose: "No quote id is passed"
         });
     } else { // search and send quote
-        Quote.findById(req.params.id).populate("author").populate("postedBy").exec((err, quote) => { // searching by unique id
+        Quote.findById(req.params.id).populate("postedBy").exec((err, quote) => { // searching by unique id
             if (err) { // send 503 if error related to db
                 res.status(503).json({
                     success: false,
@@ -64,13 +65,13 @@ router.get("/:id", (req, res) => {
 
 // router to get all quotes
 router.get("/", (req, res) => {
-    if (process.env.READ_WITHOUT_AUTH != "1" || !req.session.user) { // send 404 if not logged in or user not allowed by admin
+    if (process.env.READ_WITHOUT_AUTH != "1" && !req.session.user) { // send 404 if not logged in or user not allowed by admin
         res.status(404).json({
             success: false,
             verbose: "Not Found"
         });
     } else { // send quotes otherwise
-        Quote.find().populate("author").populate("postedBy").sort({
+        Quote.find().populate("postedBy").sort({
             postedOn: "desc"
         }).exec((err, qoutes) => {
             if (err) { // send 503 if error related to db
