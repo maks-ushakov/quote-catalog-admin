@@ -99,7 +99,7 @@ router.post("/", (req, res) => {
         });
     } else { // validate and add quote
         // add quote
-        // update quotes in Author model
+        // update quotes in Author model 
     }
 });
 
@@ -123,7 +123,7 @@ router.delete("/:id", (req, res) => {
 
 // router to update quote
 router.put("/:id", (req, res) => {
-    if (!req.session.user) { // send 405 if not logged in
+    if (process.env.ACCESS_WITHOUT_AUTH != "1" && !req.session.user) { // send 405 if not logged in
         res.status(405).json({
             status: false,
             verbose: "Login to update quotes"
@@ -135,6 +135,21 @@ router.put("/:id", (req, res) => {
         });
     } else { // update quote
         // update quote use findByID instead because we have to use _id (uuid field)
+        req.body.edited = Date.now();
+
+        Quote.findByIdAndUpdate(req.params.id, req.body).exec((err) => {
+            if (err) { // send 503 if error in db operation
+                res.status(503).json({
+                    success: false,
+                    verbose: "Something went wrong"
+                });
+            } else { // send success
+                res.json({
+                    success: true,
+                    verbose: "Updated"
+                });
+            }
+        });
     }
 });
 module.exports = router;
