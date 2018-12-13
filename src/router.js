@@ -13,7 +13,7 @@ import RestorePassword from './components/restore-password.vue'
 
 Vue.use(Router)
 const router = new Router({
-	mode: 'hash',
+	mode: 'history',
 	routes: [{
 			path: '/',
 			redirect: '/home'
@@ -41,7 +41,7 @@ const router = new Router({
 			},
 			component: SignUpComponent
 		}, {
-			path: '/reset-password/:email',
+			path: '/reset-password/:email?',
 			component: ResetPasswordComponent,
 			caseSensitive: true,
 			name: 'reset-password',
@@ -69,7 +69,9 @@ const router = new Router({
 		},
 		{
 			path: '/restore-password/:token',
-			meta: {title:'Set New Password'},
+			meta: {
+				title: 'Set New Password'
+			},
 			name: 'restore-password',
 			component: RestorePassword
 		},
