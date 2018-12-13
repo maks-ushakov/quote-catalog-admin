@@ -1,56 +1,57 @@
 <template>
-    <section class="mt-2">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-7 col-lg-5">
-                <form action="" @submit.prevent="sendSubmit()">
-                    <h3 class="text-center">Enter Login Details</h3>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input
-                            autocomplete="off"
-                            type="email"
-                            id="email"
-                            autofocus
-                            class="form-control"
-                            v-model="email"
-                            @keypress="hideHelp(0)"
-                        >
-                        <small
-                            id="passwordHelpBlock"
-                            class="form-text text-muted"
-                            v-show="helpEmail"
-                        >Invalid Email</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="pass">Password</label>
-                        <input
-                            type="password"
-                            id="pass"
-                            autofocus
-                            class="form-control"
-                            v-model="password"
-                            @keypress="hideHelp(1)"
-                        >
-                    </div>
-                    <small
-                        id="passwordHelpBlock"
-                        class="form-text text-muted"
-                        v-show="helpPassword"
-                    >Invalid Password</small>
-                    <div class="form-group text-right">
-                        <router-link :to="'/reset-password/'+email">Forgot Password</router-link>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-block btn-success">
-                            <i class="fas fa-sign-in-alt">&nbsp;&nbsp;</i>Login
-                        </button>
-                    </div>
-                </form>
-                <span class="help-text">New to the community ?
-                <router-link :to="{name:'signup'}">Create Account</router-link></span>
-            </div>
-        </div>
-    </section>
+  <section class="mt-2">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-7 col-lg-5">
+        <form action @submit.prevent="sendSubmit()">
+          <h3 class="text-center">Enter Login Details</h3>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              autocomplete="off"
+              type="email"
+              id="email"
+              autofocus
+              class="form-control"
+              v-model="email"
+              @keypress="hideHelp(0)"
+            >
+            <small
+              id="passwordHelpBlock"
+              class="form-text text-muted"
+              v-show="helpEmail"
+            >Invalid Email</small>
+          </div>
+          <div class="form-group">
+            <label for="pass">Password</label>
+            <input
+              type="password"
+              id="pass"
+              autofocus
+              class="form-control"
+              v-model="password"
+              @keypress="hideHelp(1)"
+            >
+          </div>
+          <small
+            id="passwordHelpBlock"
+            class="form-text text-muted"
+            v-show="helpPassword"
+          >Invalid Password</small>
+          <div class="form-group text-right">
+            <router-link :to="'/reset-password/'+email" class="s">Forgot Password</router-link>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-block btn-success">
+              <i class="fas fa-sign-in-alt">&nbsp;&nbsp;</i>Login
+            </button>
+          </div>
+        </form>
+        <span class="help-text">New to the community ?
+          <router-link :to="{name:'signup'}" class="font-weight-bold s">Create Account</router-link>
+        </span>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -94,55 +95,60 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    h3 {
-        color: #333;
+h3 {
+  color: #333;
+}
+form {
+  background: #fff;
+  box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.06);
+  border-radius: 5px;
+  padding: 20px 30px;
+  transition: 0.3s;
+  a {
+    color: #333;
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: none;
     }
-    form {
-        background: #fff;
-        box-shadow: 0px 0px 7px 3px rgba(0, 0, 0, 0.06);
-        border-radius: 5px;
-        padding: 20px 30px;
-        transition: 0.3s;
-        a {
-            color: #333;
-            &:hover,
-            &:focus,
-            &:active {
-                text-decoration: none;
-            }
-        }
-        .btn {
-            background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
-            transition: 0.3s;
-            border:none;
-            &:hover,
-            &:focus,
-            &:active {
-                background-image: linear-gradient(to bottom, #819bcb, #536f9d);
-                box-shadow: none;
-                transition: 0.3s;
-            }
-        }
+  }
+  .btn {
+    background-image: linear-gradient(to bottom, #a5b8da, #7089b3);
+    transition: 0.3s;
+    border: none;
+    &:hover,
+    &:focus,
+    &:active {
+      background-image: linear-gradient(to bottom, #819bcb, #536f9d);
+      box-shadow: none;
+      transition: 0.3s;
     }
-    span.help-text {
-        display: block;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        text-align: center;
-        color: #333;
-        a {
-            color: #333;
-            font-weight: 500;
-            &:hover,
-            &:focus,
-            &:active {
-                text-decoration: none;
-            }
-        }
+  }
+}
+span.help-text {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+  a {
+    color: #333;
+    font-weight: 500;
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: none;
     }
-    @media screen and (max-width:767px) {
-        h3 {
-            font-size: 1.3rem;
-        }
-    }
+  }
+}
+@media screen and (max-width: 767px) {
+  h3 {
+    font-size: 1.3rem;
+  }
+}
+
+.s {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
 </style>
