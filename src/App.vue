@@ -1,5 +1,5 @@
 <template>
-	<section class="main">
+	<section class="main" id="app">
 		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
 			<router-link :to="{name:'home'}" class="navbar-brand">Quote</router-link>
 			<button
