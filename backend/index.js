@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const history = require("connect-history-api-fallback");
+
 mongoose.Promise = global.Promise;
 
 // connecting to mongoose
@@ -31,8 +33,8 @@ if (process.env.NODE_ENV == "development") {
 } else {
     app.use(require("morgan")("combined"));
 }
-app.use(bodyParser.json());
 app.use(express.static(path.resolve(path.join(__dirname, '../public'))));
+app.use(bodyParser.json());
 app.use(cors());
 app.use(cookieParser());
 app.use(session({
@@ -49,6 +51,11 @@ app.use(session({
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/quotes", require("./routes/quotes"));
 app.use("/api/author", require("./routes/author"));
+
+app.use(history({
+    index: path.resolve(path.join(__dirname, '../public'))
+}));
+app.use(express.static(path.resolve(path.join(__dirname, '../public'))));
 
 // handling 404
 app.get("*", (req, res) => {
