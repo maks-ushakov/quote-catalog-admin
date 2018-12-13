@@ -1,7 +1,6 @@
 <template>
   <section>
     <form action @submit.prevent="sendSubmit()">
-      <h2>HI</h2>
       <input type="text" v-model="email">
       <button type="submit">Send Reset Link</button>
     </form>
