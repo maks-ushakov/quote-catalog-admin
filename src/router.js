@@ -50,7 +50,7 @@ const router = new Router({
 			}
 		},
 		{
-			path: '/user/:id/dashboard',
+			path: '/user/dashboard',
 			component: DashboardComponent,
 			caseSensitive: true,
 			meta: {
@@ -59,7 +59,7 @@ const router = new Router({
 			name: 'dashboard'
 		},
 		{
-			path: '/user/:id/settings',
+			path: '/user/settings',
 			meta: {
 				title: 'Settings'
 			},
