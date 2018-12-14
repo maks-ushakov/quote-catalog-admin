@@ -127,6 +127,30 @@ router.get("/check-id/:id", (req, res) => {
     });
 });
 
+// router to check availability of email
+router.get("/check-email/:email", (req, res) => {
+    Author.findOne({
+        email: req.params.email
+    }).exec((err, doc) => {
+        if (err) { // send 503 if error while db operation
+            res.status(503).json({
+                success: false,
+                verbose: "Something went wrong"
+            });
+        } else if (!doc) { // send 404 if not found
+            res.status(404).json({
+                success: true,
+                verbose: "Available"
+            });
+        } else { // send 200 and false if not available
+            res.json({
+                success: false,
+                verbose: "Taken"
+            });
+        }
+    });
+});
+
 // router to get updatable info
 router.get("/update", (req, res) => {
     if (!req.session.user) { // send 404 if not logged in
