@@ -25,8 +25,17 @@ router.get("/random", (req, res) => {
                         success: false,
                         verbose: "Something went wrong"
                     });
-                } else { // send random data
-                    res.json(quote);
+                } else if (!quote) { // send 404 if no quotes uploaded
+                    res.status(404).json({
+                        status: false,
+                        verbose: "Not Found"
+                    });
+                } else { // send random quote
+                    res.json({
+                        status: true,
+                        verbose: "Found",
+                        quote: quote
+                    });
                 }
             });
         }
