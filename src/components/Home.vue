@@ -6,6 +6,9 @@
         <figcaption class="quote-by" v-cloak>— {{name}}</figcaption>
       </figure>
     </div>
+    <p class="text-right">
+      <i class="fas fa-sync-alt fa-sm fa-fw r" @click="random()"></i>
+    </p>
   </section>
 </template>
 
@@ -25,7 +28,7 @@ export default {
           if (resp.ok) {
             return resp.json();
           } else if (!resp.ok && resp.status === 404) {
-            this.$router.push({ name: "not-found" });
+            throw new Error("Not Found");
           } else if (!resp.ok && resp.status === 406) {
             throw new Error("Invalid Input");
           } else if (!resp.ok && resp.status === 503) {
@@ -36,18 +39,11 @@ export default {
           (this.text = data.text), (this.name = data.author);
         })
         .catch(err => {
-          if (/null$/.test(err.message)) {
-            alert("Backend Error\nContact Developers");
-          } else {
-            alert(err.message);
-          }
+          alert(err.message);
         });
     }
   },
   created() {
-    this.random();
-  },
-  update() {
     this.random();
   }
 };
@@ -148,5 +144,8 @@ blockquote {
   .notepaper {
     width: 100%;
   }
+}
+.r {
+  cursor: pointer;
 }
 </style>
