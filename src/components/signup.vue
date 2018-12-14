@@ -16,7 +16,7 @@
               class="form-control"
               id="dname"
               @focus="showMe=true"
-              @blur="showMe=false"
+              @blur="showMe=false;checkAvailability()"
               autocomplete="off"
               v-model="dname"
             >
@@ -29,7 +29,14 @@
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" class="form-control" id="email" autocomplete="off" v-model="email">
+            <input
+              type="text"
+              class="form-control"
+              id="email"
+              autocomplete="off"
+              v-model="email"
+              @blur="checkEmail()"
+            >
             <small class="form-text text-muted" v-show="help.email1">Invalid Email</small>
             <small class="form-text text-muted" v-show="help.email2">Already Registed.</small>
           </div>
@@ -49,8 +56,11 @@
             >
             <small class="form-text text-muted" v-show="help.cpass">Password did not match</small>
           </div>
-          <div class="form-group">
+          <div class="form-group" v-show="!success">
             <button class="btn btn-block btn-success" type="submit">Register</button>
+          </div>
+          <div class="form-group" v-show="success">
+            <button class="btn btn-block btn-info" type="submit" disabled>{{sdata}}</button>
           </div>
         </form>
         <span class="help-text">Already have an account ?
@@ -79,7 +89,11 @@ export default {
       dname: "",
       pass: "",
       cpass: "",
-      email: ""
+      email: "",
+      davail: true,
+      dnavail: true,
+      success: false,
+      sdata: "Submitting"
     };
   },
   methods: {
@@ -87,6 +101,13 @@ export default {
       // validating
       this.help.name = this.name.length == 0;
       this.help.cpass = !(this.pass == this.cpass);
+      this.help.email1 =
+        this.email == "" ||
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+          this.email
+        ) == false;
+
+      // preventing unconditional signup
       if (
         this.help.name ||
         this.help.cpass ||
@@ -98,7 +119,55 @@ export default {
       ) {
         return;
       }
-      console.log("Submit");
+
+      // animate
+      this.success = true;
+
+      // building data
+      const data = JSON.stringify({
+        id: this.dname,
+        name: this.name,
+        email: this.email,
+        password: this.pass
+      });
+
+      // sending post request
+      fetch("/api/author/register", {
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(resp => {
+          if (!resp.ok && resp.status === 404) {
+            this.$router.push({ name: "not-found" });
+          } else if (!resp.ok && resp.status === 406) {
+            throw new Error("Invalid Input");
+          } else if (!resp.ok && resp.status === 503) {
+            throw new Error("Something Went Wrong");
+          } else {
+            this.sdata = "Registered Successfully";
+            setTimeout(() => {
+              this.$router.push({ name: "login" });
+            }, 2000);
+          }
+        })
+        .catch(alert);
+    },
+    checkAvailability() {
+      fetch(`/api/author/check-id/${this.dname}`)
+        .then(resp => {
+          this.help.dname2 = resp.ok;
+        })
+        .catch(alert);
+    },
+    checkEmail() {
+      fetch(`/api/author/check-email/${this.email}`)
+        .then(resp => {
+          this.help.email2 = resp.ok;
+        })
+        .catch(alert);
     }
   }
 };
