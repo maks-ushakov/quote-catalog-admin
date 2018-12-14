@@ -101,10 +101,13 @@ export default {
       })
         .then(resp => {
           if (!resp.ok && resp.status === 404) {
+            this.success = false;
             throw new Error("Invalid Email/Password");
           } else if (!resp.ok && resp.status === 406) {
+            this.success = false;
             throw new Error("Invalid Input");
           } else if (!resp.ok && resp.status === 503) {
+            this.success = false;
             throw new Error("Something Went Wrong");
           } else {
             this.sdata = "Logged In";
