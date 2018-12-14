@@ -38,14 +38,14 @@
               aria-expanded="false"
             >Profile</a>
             <div class="dropdown-menu dropdown-menu-right">
-              <router-link :to="{name:'dashboard', params:{id:id}}" class="dropdown-item">
+              <router-link :to="{name:'dashboard'}" class="dropdown-item">
                 <i class="fas fa-user-circle">&nbsp;&nbsp;</i>Dashboard
               </router-link>
-              <router-link :to="{name:'settings', params:{id:id}}" class="dropdown-item">
+              <router-link :to="{name:'settings'}" class="dropdown-item">
                 <i class="fas fa-cog">&nbsp;&nbsp;</i>Settings
               </router-link>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#" @click.prevent="logout()">
+              <a class="dropdown-item" href @click.prevent="logout()">
                 <i class="fas fa-sign-out-alt">&nbsp;&nbsp;</i>Logout
               </a>
             </div>
@@ -63,8 +63,7 @@ export default {
   name: "Main",
   data() {
     return {
-      logged: false,
-      id: ""
+      logged: false
     };
   },
   methods: {
