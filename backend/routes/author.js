@@ -35,7 +35,7 @@ router.get("/:id", (req, res) => {
     } else { // find and send valid response otherwise
         Author.findOne({ // finding one document with id passed in parameter
             id: req.params.id
-        }, "name email quotes joined").populate("quotes").exec((err, author) => {
+        }, "name email joined").exec((err, author) => {
             if (err) { // send 503 if error in db operation
                 res.send(503).json({
                     success: false,

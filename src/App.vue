@@ -80,7 +80,9 @@ export default {
             this.$router.push({ name: "login" });
           }
         })
-        .catch(alert);
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
@@ -88,14 +90,18 @@ export default {
       .then(resp => {
         this.logged = resp.ok;
       })
-      .catch(alert);
+      .catch(err => {
+        console.log(err);
+      });
   },
   beforeUpdate() {
     fetch("/api/author/is-logged")
       .then(resp => {
         this.logged = resp.ok;
       })
-      .catch(alert);
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 </script>

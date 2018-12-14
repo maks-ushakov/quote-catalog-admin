@@ -35,7 +35,13 @@ export default {
         .then(data => {
           (this.text = data.text), (this.name = data.author);
         })
-        .catch(alert);
+        .catch(err => {
+          if (/null$/.test(err.message)) {
+            alert("Backend Error\nContact Developers");
+          } else {
+            alert(err.message);
+          }
+        });
     }
   },
   created() {
