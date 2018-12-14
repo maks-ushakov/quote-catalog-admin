@@ -10,6 +10,7 @@ import ResetPasswordComponent from './components/reset-password.vue'
 import DashboardComponent from './components/user/dashboard.vue'
 import SettingComponent from './components/user/settings.vue'
 import RestorePassword from './components/restore-password.vue'
+import AuthorProfileComponent from './components/author-profile.vue'
 
 Vue.use(Router)
 const router = new Router({
@@ -66,6 +67,15 @@ const router = new Router({
 			caseSensitive: true,
 			component: SettingComponent,
 			name: 'settings'
+		},
+		{
+			path: "/author/:id",
+			meta: {
+				title: "Author Profile"
+			},
+			component: AuthorProfileComponent,
+			caseSensitive: true,
+			name: "author"
 		},
 		{
 			path: '/restore-password/:token',
