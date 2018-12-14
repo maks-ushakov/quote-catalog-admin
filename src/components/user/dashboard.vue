@@ -14,7 +14,7 @@ export default {
           this.$router.push({ name: "not-found" });
         }
       })
-      .catch();
+      .catch(alert);
   },
   beforeMount() {}
 };
