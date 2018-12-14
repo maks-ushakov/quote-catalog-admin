@@ -55,7 +55,7 @@ router.post("/register", (req, res) => {
         if (!req.body.email || !/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.email) ||
             !req.body.password || !req.body.id || !req.body.name) { // send 406 if invalid input
             res.status(406).json({
-                success: true,
+                success: false,
                 verbose: "Invalid input"
             });
         } else { // hash password and save
