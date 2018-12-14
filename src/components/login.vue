@@ -40,9 +40,15 @@
           <div class="form-group text-right">
             <router-link :to="'/reset-password/'+email" class="s">Forgot Password</router-link>
           </div>
-          <div class="form-group">
+          <div class="form-group" v-show="!success">
             <button type="submit" class="btn btn-block btn-success">
               <i class="fas fa-sign-in-alt">&nbsp;&nbsp;</i>Login
+            </button>
+          </div>
+          <div class="form-group" v-show="success">
+            <button type="submit" class="btn btn-block btn-success" disabled>
+              <i class="fas fa-sign-in-alt">&nbsp;&nbsp;</i>
+              {{sdata}}
             </button>
           </div>
         </form>
@@ -63,24 +69,49 @@ export default {
       password: "",
       helpEmail: false,
       helpPassword: false,
-      showingPass: false
+      showingPass: false,
+      sdata: "Logging",
+      success: false
     };
   },
   methods: {
     sendSubmit() {
-      if (
+      // validate
+      this.helpEmail =
         this.email == "" ||
-        // eslint-disable-next-line
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
           this.email
-        ) == false
-      ) {
-        this.helpEmail = true;
-      }
+        ) == false;
+      this.helpPassword = this.password.length < 1;
 
-      if (this.password.length < 8) {
-        this.helpPassword = true;
-      }
+      if (this.helpEmail || this.helpPassword) return;
+
+      // builing data
+      const data = JSON.stringify({
+        email: this.email,
+        password: this.password
+      });
+      this.success = true;
+      fetch("/api/auth/login", {
+        method: "POST",
+        body: data,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(resp => {
+          if (!resp.ok && resp.status === 404) {
+            throw new Error("Invalid Email/Password");
+          } else if (!resp.ok && resp.status === 406) {
+            throw new Error("Invalid Input");
+          } else if (!resp.ok && resp.status === 503) {
+            throw new Error("Something Went Wrong");
+          } else {
+            this.sdata = "Logged In";
+            this.$router.push({ name: "home" });
+          }
+        })
+        .catch(alert);
     },
     hideHelp(s) {
       if (s == 0 && this.helpEmail) {

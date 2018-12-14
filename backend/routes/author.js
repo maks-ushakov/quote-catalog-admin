@@ -6,6 +6,20 @@ const router = require("express").Router();
 const Author = require("../models/author");
 const hasher = require("crypto");
 
+router.get("/is-logged", (req, res) => {
+    if (req.session.user) {
+        res.json({
+            success: true,
+            verbose: "Logged in"
+        });
+    } else {
+        res.status(405).json({
+            success: false,
+            verbose: "Not Logged In"
+        });
+    }
+})
+
 // router to get author by id
 router.get("/:id", (req, res) => {
     if (!req.session.user) { // send 405 if not logged in

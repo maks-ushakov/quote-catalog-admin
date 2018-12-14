@@ -56,7 +56,7 @@ router.post("/login", (req, res) => {
 
 // router to logout the user
 router.get("/logout", (req, res) => {
-    if (req.session.user) {
+    if (!req.session.user) {
         // send 404 if not logged in
         res.status(404).json({
             success: false,
