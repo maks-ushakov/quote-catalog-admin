@@ -115,6 +115,17 @@ router.post("/reset-password", (req, res) => {
                     verbose: `Email '${req.body.email}' not found`
                 });
             } else {
+                // delete all docs with email
+                ResetPassword.findOneAndDelete({
+                    email: req.body.email
+                }).exec((err) => {
+                    if (err) { // send 503 if error in db operation
+                        res.status(503).json({
+                            success: false,
+                            verbose: "Something went wrong"
+                        });
+                    }
+                });
                 let tok = token.generate();
                 let reset = new ResetPassword({
                     email: req.body.email,
@@ -127,11 +138,7 @@ router.post("/reset-password", (req, res) => {
                     subject: "Somebody Requested Password Reset",
                     text: "Hello User, You have a password reset request.\n\nHere is the link http://localhost:8090/restore-password/" + tok
                 }
-                mailer.send(msg).then((r) => {
-                    console.log(r);
-                }).catch(() => {
-                    console.log("Error");
-                });
+                mailer.send(msg)
                 reset.save((err, doc) => {
                     if (err) { // send 503 if error in db operation
                         res.status(503).json({
@@ -151,7 +158,7 @@ router.post("/reset-password", (req, res) => {
 });
 
 // adding router check token availability
-router.get("/restore-password", (req, res) => {
+router.get("/restore-password/:token", (req, res) => {
     if (req.session.user) {
         // send 404 if logged in
         res.status(404).json({
@@ -160,7 +167,9 @@ router.get("/restore-password", (req, res) => {
         });
     } else {
         // send non 404 otherwise
-        ResetPassword.findOne(req.body).exec((err, doc) => {
+        ResetPassword.findOne({
+            token: req.params.token
+        }).exec((err, doc) => {
             if (err) { // send 503 if error while dealing with db
                 res.status(503).json({
                     success: false,
@@ -184,7 +193,11 @@ router.get("/restore-password", (req, res) => {
 // adding router to restore password
 router.post("/restore-password/:token", (req, res) => {
     if (req.session.user) { // send 404 if logged in
-        res.status(404).json();
+        console.log("log");
+        res.status(404).json({
+            status: false,
+            verbose: "Not Found"
+        });
     } else { // find restore and send resposne
         ResetPassword.findOneAndDelete({
             token: req.params.token
@@ -195,6 +208,7 @@ router.post("/restore-password/:token", (req, res) => {
                     verbose: "Something went wrong"
                 });
             } else if (!doc) { // no request for reset password found for token
+                console.log("no tok")
                 res.status(404).json({
                     success: false,
                     verbose: "Not Found"
