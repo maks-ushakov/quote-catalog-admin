@@ -6,6 +6,14 @@ const router = require("express").Router();
 const Author = require("../models/author");
 const hasher = require("crypto");
 const ResetPassword = require("../models/reset-password");
+const tokenGenerator = require("uuid-token-generator");
+const mailer = require("@sendgrid/mail");
+const token = new tokenGenerator(256);
+if (!process.env.SENDGRID_API) {
+    console.log("MAILER NOT SET");
+    process.exit(1);
+}
+mailer.setApiKey(process.env.SENDGRID_API);
 
 // router to login the user
 router.post("/login", (req, res) => {
@@ -102,16 +110,41 @@ router.post("/reset-password", (req, res) => {
                 });
             } else if (!author) {
                 // send 404 if no author found
-                res.status(503).json({
+                res.status(404).json({
                     success: false,
                     verbose: `Email '${req.body.email}' not found`
                 });
             } else {
-                // send success
-                res.json({
-                    success: true,
-                    verbose: `Email sent to ${req.body.email}`
+                let tok = token.generate();
+                let reset = new ResetPassword({
+                    email: req.body.email,
+                    token: tok
                 });
+
+                const msg = {
+                    to: req.body.email,
+                    from: "no-reply@quote-catalog.herokuapp.com",
+                    subject: "Somebody Requested Password Reset",
+                    text: "Hello User, You have a password reset request.\n\nHere is the link http://localhost:8090/restore-password/" + tok
+                }
+                mailer.send(msg).then((r) => {
+                    console.log(r);
+                }).catch(() => {
+                    console.log("Error");
+                });
+                reset.save((err, doc) => {
+                    if (err) { // send 503 if error in db operation
+                        res.status(503).json({
+                            success: false,
+                            verbose: "Something went wrong"
+                        });
+                    } else { // send 200 if sent
+                        res.json({
+                            success: true,
+                            verbose: `Email sent to ${req.body.email}`
+                        });
+                    }
+                })
             }
         });
     }
