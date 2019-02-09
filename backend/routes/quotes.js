@@ -25,8 +25,17 @@ router.get("/random", (req, res) => {
                         success: false,
                         verbose: "Something went wrong"
                     });
-                } else { // send random data
-                    res.json(quote);
+                } else if (!quote) { // send 404 if no quotes uploaded
+                    res.status(404).json({
+                        status: false,
+                        verbose: "Not Found"
+                    });
+                } else { // send random quote
+                    res.json({
+                        status: true,
+                        verbose: "Found",
+                        quote: quote
+                    });
                 }
             });
         }
@@ -92,20 +101,50 @@ router.get("/", (req, res) => {
 
 // router to create new route 
 router.post("/", (req, res) => {
-    if (!req.session.user) { // send 405 if not logged in
+    if (process.env.ACCESS_WITHOUT_AUTH != "1" && !req.session.user) { 
+        // send 405 if not logged in
         res.status(405).json({
             status: false,
             verbose: "Login to add quotes"
         });
-    } else { // validate and add quote
-        // add quote
-        // update quotes in Author model 
+
+    } else { 
+        // validate and add quote
+        if (!req.body.text) {
+            res.status(406).json({
+                success: false,
+                verbose: "Invalid input. Text is required"
+            });
+        } else {
+            // add quote
+            if (!req.body.author) {
+                req.body.author = "Unknown"
+            }
+            
+            req.body.postedBy = req.session.user;
+            const quote = new Quote(req.body);
+            // update quotes in Author model
+            quote.save((err) => { //saving newly created document
+                if (err) { // send 503 if error in db operation
+                    res.status(503).json({
+                        success: false,
+                        verbose: "Something went wrong"
+                    });
+                } else { // send success otherwise
+                    res.json({
+                        success: true,
+                        verbose: "Successfully added"
+                    });
+                }
+            })
+        }
+
     }
 });
 
 // router to delete quote
 router.delete("/:id", (req, res) => {
-    if (!req.session.user) { // send 405 if not logged in
+    if (process.env.ACCESS_WITHOUT_AUTH != "1" && !req.session.user) { // send 405 if not logged in
         res.status(405).json({
             status: false,
             verbose: "Login to delete quotes"
@@ -117,6 +156,21 @@ router.delete("/:id", (req, res) => {
         });
     } else { // delete quote
         // delete quote use findByID instead because we have to use _id (uuid field)
+
+        Quote.findByIdAndDelete(req.params.id).exec((err) => {
+            if (err) { // send 503 if error in db operation
+                res.status(503).json({
+                    success: false,
+                    verbose: "Something went wrong"
+                });
+            } else { // send success
+                res.json({
+                    success: true,
+                    verbose: "Deleted"
+                });
+            }
+        });
+
         // delete from Authors collection too
     }
 });

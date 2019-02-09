@@ -6,6 +6,20 @@ const router = require("express").Router();
 const Author = require("../models/author");
 const hasher = require("crypto");
 
+router.get("/is-logged", (req, res) => {
+    if (req.session.user) {
+        res.json({
+            success: true,
+            verbose: "Logged in"
+        });
+    } else {
+        res.status(405).json({
+            success: false,
+            verbose: "Not Logged In"
+        });
+    }
+})
+
 // router to get author by id
 router.get("/:id", (req, res) => {
     if (!req.session.user) { // send 405 if not logged in
@@ -21,7 +35,7 @@ router.get("/:id", (req, res) => {
     } else { // find and send valid response otherwise
         Author.findOne({ // finding one document with id passed in parameter
             id: req.params.id
-        }).populate("quotes").exec((err, author) => {
+        }, "name email joined").exec((err, author) => {
             if (err) { // send 503 if error in db operation
                 res.send(503).json({
                     success: false,
@@ -55,7 +69,7 @@ router.post("/register", (req, res) => {
         if (!req.body.email || !/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.email) ||
             !req.body.password || !req.body.id || !req.body.name) { // send 406 if invalid input
             res.status(406).json({
-                success: true,
+                success: false,
                 verbose: "Invalid input"
             });
         } else { // hash password and save
@@ -107,6 +121,30 @@ router.get("/profile", (req, res) => {
 router.get("/check-id/:id", (req, res) => {
     Author.findOne({
         id: req.params.id
+    }).exec((err, doc) => {
+        if (err) { // send 503 if error while db operation
+            res.status(503).json({
+                success: false,
+                verbose: "Something went wrong"
+            });
+        } else if (!doc) { // send 404 if not found
+            res.status(404).json({
+                success: true,
+                verbose: "Available"
+            });
+        } else { // send 200 and false if not available
+            res.json({
+                success: false,
+                verbose: "Taken"
+            });
+        }
+    });
+});
+
+// router to check availability of email
+router.get("/check-email/:email", (req, res) => {
+    Author.findOne({
+        email: req.params.email
     }).exec((err, doc) => {
         if (err) { // send 503 if error while db operation
             res.status(503).json({

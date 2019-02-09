@@ -10,10 +10,11 @@ import ResetPasswordComponent from './components/reset-password.vue'
 import DashboardComponent from './components/user/dashboard.vue'
 import SettingComponent from './components/user/settings.vue'
 import RestorePassword from './components/restore-password.vue'
+import AuthorProfileComponent from './components/author-profile.vue'
 
 Vue.use(Router)
 const router = new Router({
-	mode: 'hash',
+	mode: 'history',
 	routes: [{
 			path: '/',
 			redirect: '/home'
@@ -41,7 +42,7 @@ const router = new Router({
 			},
 			component: SignUpComponent
 		}, {
-			path: '/reset-password/:email',
+			path: '/reset-password/:email?',
 			component: ResetPasswordComponent,
 			caseSensitive: true,
 			name: 'reset-password',
@@ -50,7 +51,7 @@ const router = new Router({
 			}
 		},
 		{
-			path: '/user/:id/dashboard',
+			path: '/user/dashboard',
 			component: DashboardComponent,
 			caseSensitive: true,
 			meta: {
@@ -59,7 +60,7 @@ const router = new Router({
 			name: 'dashboard'
 		},
 		{
-			path: '/user/:id/settings',
+			path: '/user/settings',
 			meta: {
 				title: 'Settings'
 			},
@@ -68,8 +69,19 @@ const router = new Router({
 			name: 'settings'
 		},
 		{
+			path: "/author/:id",
+			meta: {
+				title: "Author Profile"
+			},
+			component: AuthorProfileComponent,
+			caseSensitive: true,
+			name: "author"
+		},
+		{
 			path: '/restore-password/:token',
-			meta: {title:'Set New Password'},
+			meta: {
+				title: 'Set New Password'
+			},
 			name: 'restore-password',
 			component: RestorePassword
 		},

@@ -1,30 +1,22 @@
 <template>
-    <section>
-        <div v-show="found">{{id}}</div>
-        <not-found v-show="!found"></not-found>
-    </section>
+  <section></section>
 </template>
 
 <script>
-import NF from "../404.vue";
 export default {
   data() {
-    return {
-      id: this.$route.params.id,
-      found: false
-    };
+    return {};
   },
-  components: {
-    notFound: NF
+  created() {
+    fetch("/api/author/is-logged")
+      .then(resp => {
+        if (!resp.ok) {
+          this.$router.push({ name: "not-found" });
+        }
+      })
+      .catch(alert);
   },
-  beforeMount() {
-    if (this.id == 123) {
-      this.found = false;
-      document.title = "Not Found";
-    } else {
-      this.found = true;
-    }
-  }
+  beforeMount() {}
 };
 </script>
 
