@@ -36,7 +36,8 @@ export default {
           }
         })
         .then(data => {
-          (this.text = data.text), (this.name = data.author);
+          console.log(data);
+          (this.text = data.quote.text), (this.name = data.quote.author);
         })
         .catch(err => {
           alert(err.message);
