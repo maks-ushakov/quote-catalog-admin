@@ -143,7 +143,7 @@ router.post("/", (req, res) => {
 
 // router to delete quote
 router.delete("/:id", (req, res) => {
-    if (!req.session.user) { // send 405 if not logged in
+    if (process.env.ACCESS_WITHOUT_AUTH != "1" && !req.session.user) { // send 405 if not logged in
         res.status(405).json({
             status: false,
             verbose: "Login to delete quotes"
@@ -155,6 +155,21 @@ router.delete("/:id", (req, res) => {
         });
     } else { // delete quote
         // delete quote use findByID instead because we have to use _id (uuid field)
+
+        Quote.findByIdAndDelete(req.params.id).exec((err) => {
+            if (err) { // send 503 if error in db operation
+                res.status(503).json({
+                    success: false,
+                    verbose: "Something went wrong"
+                });
+            } else { // send success
+                res.json({
+                    success: true,
+                    verbose: "Deleted"
+                });
+            }
+        });
+
         // delete from Authors collection too
     }
 });
