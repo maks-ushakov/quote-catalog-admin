@@ -111,7 +111,7 @@ export default {
             throw new Error("Something Went Wrong");
           } else {
             this.sdata = "Logged In";
-            this.$router.push({ name: "home" });
+            this.$router.push({ name: "dashboard" });
           }
         })
         .catch(alert);
