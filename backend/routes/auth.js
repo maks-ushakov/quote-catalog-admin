@@ -7,13 +7,13 @@ const Author = require("../models/author");
 const hasher = require("crypto");
 const ResetPassword = require("../models/reset-password");
 const tokenGenerator = require("uuid-token-generator");
-const mailer = require("@sendgrid/mail");
+//const mailer = require("@sendgrid/mail");
 const token = new tokenGenerator(256);
-if (!process.env.SENDGRID_API) {
-    console.log("MAILER NOT SET");
-    process.exit(1);
-}
-mailer.setApiKey(process.env.SENDGRID_API);
+// if (!process.env.SENDGRID_API) {
+//     console.log("MAILER NOT SET");
+//     process.exit(1);
+// }
+//mailer.setApiKey(process.env.SENDGRID_API);
 
 // router to login the user
 router.post("/login", (req, res) => {
@@ -138,7 +138,7 @@ router.post("/reset-password", (req, res) => {
                     subject: "Somebody Requested Password Reset",
                     text: "Hello User, You have a password reset request.\n\nHere is the link http://localhost:8090/restore-password/" + tok
                 }
-                mailer.send(msg)
+                // mailer.send(msg)
                 reset.save((err, doc) => {
                     if (err) { // send 503 if error in db operation
                         res.status(503).json({
