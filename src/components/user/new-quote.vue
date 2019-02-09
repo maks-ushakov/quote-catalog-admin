@@ -32,8 +32,9 @@ export default {
   },
   methods: {
     sendSubmit() {
-    if(this.q)
+    if(this.q){
       let data = { text: this.qtext, author:"" };
+    }
 
     }
   },
