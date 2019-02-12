@@ -6,6 +6,8 @@ global.$ = jQuery
 // eslint-disable-next-line
 let Bootstrap = require('bootstrap')
 import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap';
+
 Vue.config.productionTip = false
 
 new Vue({

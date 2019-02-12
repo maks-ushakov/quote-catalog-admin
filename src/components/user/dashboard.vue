@@ -33,6 +33,19 @@ export default {
         }
       })
       .catch(alert);
+
+    fetch("/api/quotes/")
+            .then(resp => {
+              if (resp.ok) {
+                return resp.json();
+              }
+            })
+            .then(data => {
+              console.log(data.quotes);
+            })
+            .catch(err => {
+              alert(err.message);
+            });
   },
   beforeMount() {}
 };

@@ -4,7 +4,7 @@
       <form @submit.prevent="sendSubmit">
         <div class="form-group">
           <label for="txt">Quote</label>
-          <input type="text" id="txt" v-model="text">
+          <input type="text" id="txt" v-model="qtext">
         </div>
         <div class="form-group">
           <input type="checkbox" id="u" @change="q=!q">
@@ -21,6 +21,7 @@
           <button type="submit">Submit</button>
         </div>
       </form>
+
     </div>
   </section>
 </template>
@@ -31,7 +32,7 @@ export default {
     return {
       q: false,
       author: "",
-      text: "",
+      qtext: "",
       success: false
     };
   },
@@ -40,13 +41,16 @@ export default {
 
       const data = JSON.stringify({
         author: this.author,
-        text: this.text
+        text: this.qtext
       });
       this.success = true;
 
-      fetch('/api/quotes/',{
+      fetch('/api/quotes/', {
         method: "POST",
         body: data,
+        headers: {
+          "Content-Type": "application/json"
+        }
       })
         .then(resp => {
         if (!resp.ok && resp.status === 404) {

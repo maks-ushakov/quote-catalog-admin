@@ -36,8 +36,11 @@
               role="button"
               aria-haspopup="true"
               aria-expanded="false"
+              @click="dropdown=!dropdown"
             >Profile</a>
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu-right"
+                  v-show="dropdown"
+            >
               <router-link :to="{name:'dashboard'}" class="dropdown-item">
                 <i class="fas fa-user-circle">&nbsp;&nbsp;</i>Dashboard
               </router-link>
@@ -63,7 +66,8 @@ export default {
   name: "Main",
   data() {
     return {
-      logged: false
+      logged: false,
+      dropdown: false
     };
   },
   methods: {
@@ -83,6 +87,9 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    toggleDropdown(){
+      this.dropdown = false
     }
   },
   created() {
@@ -93,6 +100,13 @@ export default {
       .catch(err => {
         console.log(err);
       });
+
+
+    document.addEventListener('click', (e) => {
+      if(!e.target.classList.contains('dropdown-toggle')){
+        this.toggleDropdown()
+      }
+    });
   },
   beforeUpdate() {
     fetch("/api/author/is-logged")
@@ -118,4 +132,23 @@ section.main {
 section.main nav {
   flex: 1 0 100%;
 }
+.dropdown-menu-right{
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  float: left;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
 </style>
