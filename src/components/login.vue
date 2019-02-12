@@ -78,10 +78,10 @@ export default {
     sendSubmit() {
       // validate
       this.helpEmail =
-        this.email == "" ||
+        this.email == "" /*||
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
           this.email
-        ) == false;
+        ) == false*/;
       this.helpPassword = this.password.length < 1;
 
       if (this.helpEmail || this.helpPassword) return;
@@ -100,6 +100,7 @@ export default {
         }
       })
         .then(resp => {
+          console.log(resp);
           if (!resp.ok && resp.status === 404) {
             this.success = false;
             throw new Error("Invalid Email/Password");

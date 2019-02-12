@@ -1,10 +1,10 @@
 <template>
   <section>
     <div class="row">
-      <form @submit.prevent="sendSubmit()">
+      <form @submit.prevent="sendSubmit">
         <div class="form-group">
           <label for="txt">Quote</label>
-          <input type="text" id="txt" v-model="qtxt">
+          <input type="text" id="txt" v-model="text">
         </div>
         <div class="form-group">
           <input type="checkbox" id="u" @change="q=!q">
@@ -28,15 +28,57 @@
 <script>
 export default {
   data() {
-    return { q: false, author: "", qtext: "" };
+    return {
+      q: false,
+      author: "",
+      text: "",
+      success: false
+    };
   },
   methods: {
     sendSubmit() {
-    if(this.q){
-      let data = { text: this.qtext, author:"" };
-    }
 
-    }
+      const data = JSON.stringify({
+        author: this.author,
+        text: this.text
+      });
+      this.success = true;
+
+      fetch('/api/quotes/',{
+        method: "POST",
+        body: data,
+      })
+        .then(resp => {
+        if (!resp.ok && resp.status === 404) {
+          this.success = false;
+          throw new Error("Something Went Wrong");
+        } else {
+
+        }
+      })
+      .catch(alert);
+
+
+
+    // if(this.q){
+    //   let data = { text: this.qtext, author:"" };
+    // }
+
+    },
+    // test(){
+    //   const data = JSON.stringify({
+    //     author: this.author,
+    //     text: this.qtext
+    //   });
+    //   this.success = true;
+    //   fetch('/api/quotes/',{
+    //     method: "POST",
+    //     body: data,
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     }
+    //   }).then((res) => console.log(res))
+    // }
   },
   created() {
     fetch("/api/author/is-logged").then(resp => {

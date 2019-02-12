@@ -108,7 +108,7 @@ export default {
 <style scoped>
 section.main {
   height: auto;
-  min-height: 100vh;
+  min-height: 140vh;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;

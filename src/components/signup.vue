@@ -102,10 +102,10 @@ export default {
       this.help.name = this.name.length == 0;
       this.help.cpass = !(this.pass == this.cpass);
       this.help.email1 =
-        this.email == "" ||
+        this.email == "" /*||
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-          this.email
-        ) == false;
+         this.email
+        ) == false*/ ;
 
       // preventing unconditional signup
       if (
