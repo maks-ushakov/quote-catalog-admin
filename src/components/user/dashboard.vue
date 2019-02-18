@@ -23,10 +23,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(quote, index) in dynamicTable" :key="index">
+        <tr v-for="(quote, index) in allQuotes" :key="index" >
           <th scope="row">{{index+1}}</th>
           <td>{{quote.author}}</td>
-          <td>{{quote.text}}</td>
+          <td>
+            <div class="textarea-wrap">
+              <textarea-autosize
+                      placeholder="Type something here..."
+                      v-bind:value="quote.text"
+                      :min-height="30"
+                      :max-height="350"
+                      @input="writeQuote($event)"
+                      @input.native="showCheck(quote._id)"
+
+
+              ></textarea-autosize>
+
+                <i class="confirm fas fa-check-circle"
+                   :class="{highlight: quote._id === selected}"
+                   @click="quoteUpdate(quote._id)"
+                ></i>
+
+            </div>
+
+          </td>
           <td>{{quote.postedOn}}</td>
           <td class='quote-delete'
           @click="quoteDelete(quote._id)"
@@ -34,6 +54,7 @@
         </tr>
       </tbody>
     </table>
+
   </section>
 </template>
 
@@ -41,12 +62,13 @@
 export default {
   data() {
     return {
-      allQuotes: []
+      allQuotes: [],
+      quoteToChange: '',
+      selected: undefined,
     };
   },
   methods: {
     r() {
-      console.log(1);
       this.$router.push({ name: "new-quotes" });
     },
     getQuotes() {
@@ -57,10 +79,10 @@ export default {
         }
       })
       .then(data => {
-        this.allQuotes = data.quotes
+        this.allQuotes = data.quotes;
         
         for(var i=0; i < this.allQuotes.length; i++){
-          var date = new Date(this.allQuotes[i].postedOn)
+          var date = new Date(this.allQuotes[i].postedOn);
           var day = date.getDate();
           var month = date.getMonth();
           var year = date.getFullYear();
@@ -88,13 +110,40 @@ export default {
         }
       })
       .catch(alert);
+    },
+    quoteUpdate(id) {
+      const data = JSON.stringify({
+        text: this.quoteToChange
+      });
+      this.success = true;
+
+      fetch('/api/quotes/'+id, {
+        method: "PUT",
+        body: data,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+              .then(resp => {
+                if (!resp.ok && resp.status === 404) {
+                  this.success = false;
+                  throw new Error("Something Went Wrong");
+                } else {
+                  this.getQuotes();
+                }
+              })
+              .catch(alert);
+    },
+    writeQuote(data){
+
+      this.quoteToChange = data;
+
+    },
+    showCheck(id){
+      this.selected = id
     }
   },
-  computed: {
-    dynamicTable() {
-      return this.allQuotes
-    }
-  },
+
   created() {
     fetch("/api/author/is-logged")
       .then(resp => {
@@ -105,25 +154,16 @@ export default {
       .catch(alert);
 
       this.getQuotes()
-
-      
-      // var date = new Date('2013-04-01T19:45:11.000Z');
-      // var day = date.getDate();
-      // var month = date.getMonth();
-      // var year = date.getFullYear();
-
-      // document.write(year + '-' + month + '-' + day);
-
   },
 
   beforeMount() {}
 };
 
-
 </script>
 
 <style scoped>
   .table {
+    font-size: 20px;
     background-color: #ffffff4d;
     box-shadow: 0px 16px 20px 10px rgba(82, 82, 183, 0.75);
   }
@@ -134,6 +174,10 @@ export default {
     border-top: 1px solid rgba(82, 82, 183, 0.75);
     border-bottom: 2px solid rgba(82, 82, 183, 0.75);
   }
+  table td, table th{
+    vertical-align: middle;
+    cursor: default;
+  }
   .quote-delete{
     text-align: center;
     cursor: pointer;
@@ -143,8 +187,37 @@ export default {
     cursor: pointer;
     color: #fff;
   }
-  tbody tr:hover{
+  tbody tr:hover {
     background: #848fe45c;
   }
-
+  .textarea-wrap{
+    display: flex;
+  }
+  textarea {
+    width: 100%;
+    padding-right: 40px;
+    background: inherit;
+    border: none;
+    outline: none;
+  }
+  .confirm {
+    visibility: hidden;
+    width: 50px;
+    padding: 0;
+    margin: 0;
+  }
+  .confirm.highlight {
+    visibility: visible;
+    margin: auto 0;
+    font-size: 25px;
+    color: #04ab6fcc;
+    cursor: pointer;
+  }
+  .confirm.highlight:hover{
+    font-size: 28px;
+    transition: .15s;
+  }
+  .fa-check-circle{
+    color: green;
+  }
 </style>
